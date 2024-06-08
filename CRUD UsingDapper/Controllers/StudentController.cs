@@ -16,36 +16,60 @@ namespace CRUD_UsingDapper.Controllers
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAllStudents()
         {
-            var response=await _studentService.GetAllStudents();
-            if (response==null)
-                return NotFound();
-            return Ok(response);
+            try
+            {
+                var response = await _studentService.GetAllStudents();
+                if (response == null)
+                    return NotFound();
+                return Ok(response);
+            }catch (Exception ex)
+            {
+                return StatusCode(500,ex.Message);
+            }
         }
         [HttpPost("AddStudent")]
         public async Task<IActionResult> AddStudent(StudentDto student)
         {
-            if (student == null)
-                return BadRequest();
-            var response=await _studentService.AddStudent(student);
-            if(response==null)
-                return BadRequest();
-            return Ok(response);
+            try
+            {
+                if (student == null)
+                    return BadRequest();
+                var response = await _studentService.AddStudent(student);
+                if (response == null)
+                    return BadRequest();
+                return Ok(response);
+            }catch(Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
         [HttpPut("UpdateStudent")]
         public async Task<IActionResult> UpdateStudent(Student student)
         {
-            if (student == null)
-                return BadRequest();
-            var response = await _studentService.UpdateStudent(student);
-            return Ok(response);
+            try
+            {
+                if (student == null)
+                    return BadRequest();
+                var response = await _studentService.UpdateStudent(student);
+                return Ok(response);
+            }catch( Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
         [HttpDelete("DeleteStudent")]
         public async Task<IActionResult> DeleteStudent(int id)
         {
-            if(id==0||id==null)
-                return BadRequest();
-            _studentService.DeleteStudent(id);
-            return Ok();
+            try
+            {
+                if (id == 0 || id==null)
+                    return BadRequest();
+               await _studentService.DeleteStudent(id);
+                return Ok();
+            }catch(Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
     }
 }
